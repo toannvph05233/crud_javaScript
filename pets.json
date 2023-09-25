@@ -10,7 +10,7 @@
 	"vaccinated": true,
 	"dewormed": true,
 	"sterilized": true,
-	"date": "2022-03-04T11:06:04.427Z"
+	"date": "2022-03-04"
 }, {
 	"id": "P002",
 	"name": "Charlie Tux",
@@ -23,7 +23,7 @@
 	"vaccinated": true,
 	"dewormed": false,
 	"sterilized": false,
-	"date": "2022-03-04T11:06:41.554Z"
+	"date": "2022-03-04"
 }, {
 	"id": "P003",
 	"name": "Sweetie Pie",
@@ -36,5 +36,5 @@
 	"vaccinated": false,
 	"dewormed": false,
 	"sterilized": true,
-	"date": "2022-03-04T11:12:01.522Z"
+	"date": "2022-03-04"
 }]

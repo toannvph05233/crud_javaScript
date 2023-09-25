@@ -12,15 +12,15 @@ function renderBreed(breedArr) {
         inputBreed.appendChild(option);
     }
 }
-
 document.getElementById("input-type").addEventListener("change", (e)=>renderBreedByType(e.target.value))
+
 
 function renderBreedByType(type) {
     let newBreedArr = breedArr.filter((b) => b.type == type)
     renderBreed(newBreedArr);
 }
-
 renderBreed(breedArr);
+
 
 document.getElementById("find-btn").addEventListener("click", function () {
     // Lấy giá trị từ các trường nhập liệu

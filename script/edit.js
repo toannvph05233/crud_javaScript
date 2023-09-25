@@ -170,9 +170,8 @@ function renderTableData(petArr) {
             <td><i class="bi bi-${pet.vaccinated ? 'check-circle-fill' : 'x-circle-fill'}"></i></td>
             <td><i class="bi bi-${pet.dewormed ? 'check-circle-fill' : 'x-circle-fill'}"></i></td>
             <td><i class="bi bi-${pet.sterilized ? 'check-circle-fill' : 'x-circle-fill'}"></i></td>
-            <td>${pet.bmi === 0 ? '?' : pet.bmi}</td>
             <td>${pet.date}</td>
-            <td><button type="button" class="btn btn-danger" onclick="showEdit(${pet.id})">Edit</button></td>
+            <td><button type="button" class="btn btn-danger" onclick="showEdit('${pet.id}')">Edit</button></td>
         `;
 
         tableBody.appendChild(row);

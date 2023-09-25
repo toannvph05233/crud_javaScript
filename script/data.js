@@ -15,8 +15,6 @@ document.getElementById("import-btn").addEventListener("click", (event) => {
         reader.onload = (e) => {
             const importedData = JSON.parse(e.target.result);
             saveToStorage("petArr", importedData);
-            console.log("importedData")
-            console.log(importedData)
         };
         reader.readAsText(selectedFile);
         alert("thành công")
