@@ -14,8 +14,7 @@ const breed = document.getElementById("input-breed");
 
 let petArr = getToStorage("petArr", []);
 let breedArr = getToStorage("breedArr", []);
-let healthyCheck = false;
-let healthyPetArr = [];
+
 
 
 function renderBreed(breedArr) {
@@ -49,24 +48,15 @@ submitBtn.addEventListener("click", function () {
         validateType() &&
         validateBreed()
     ) {
-        addData();
+        editData();
     }
 });
 
 function validateId() {
     const id = idInput.value;
-    if (!id || !isIdUnique(id)) {
+    if (!id) {
         alert("ID must be unique!");
         return false;
-    }
-    return true;
-}
-
-function isIdUnique(id) {
-    for (let i = 0; i < petArr.length; i++) {
-        if (petArr[i].id == id) {
-            return false;
-        }
     }
     return true;
 }
@@ -126,8 +116,7 @@ function validateBreed() {
 }
 
 
-// 4. Thêm thú cưng vào danh sách
-function addData() {
+function editData() {
     const petData = {
         id: idInput.value,
         name: nameInput.value,
@@ -143,10 +132,14 @@ function addData() {
         bmi: 0,
         date: formatDate(new Date())
     };
-    petArr.push(petData);
+    for (let i = 0; i < petArr.length; i++) {
+        if (petArr[i].id == idInput.value){
+            petArr[i] = petData;
+        }
+    }
+    console.log(petArr)
     saveToStorage("petArr", petArr);
-    clearInput();
-    alert("Data added successfully!");
+    alert("Data Edit successfully!");
     renderTableData(petArr);
 
 }
@@ -159,7 +152,6 @@ function formatDate(date) {
 }
 
 
-// 5. Hiển thị danh sách thú cưng
 function renderTableData(petArr) {
     const tableBody = document.getElementById("tbody");
     tableBody.innerHTML = "";
@@ -178,9 +170,9 @@ function renderTableData(petArr) {
             <td><i class="bi bi-${pet.vaccinated ? 'check-circle-fill' : 'x-circle-fill'}"></i></td>
             <td><i class="bi bi-${pet.dewormed ? 'check-circle-fill' : 'x-circle-fill'}"></i></td>
             <td><i class="bi bi-${pet.sterilized ? 'check-circle-fill' : 'x-circle-fill'}"></i></td>
-            <td>${!pet.bmi ? '?' : pet.bmi}</td>
+            <td>${pet.bmi === 0 ? '?' : pet.bmi}</td>
             <td>${pet.date}</td>
-            <td><button type="button" class="btn btn-danger" onclick="deletePet(${pet.id})">Delete</button></td>
+            <td><button type="button" class="btn btn-danger" onclick="showEdit(${pet.id})">Edit</button></td>
         `;
 
         tableBody.appendChild(row);
@@ -189,68 +181,23 @@ function renderTableData(petArr) {
 
 renderTableData(petArr);
 
-// 6. Xóa các dữ liệu vừa nhập trên Form
-function clearInput() {
-    idInput.value = "";
-    nameInput.value = "";
-    ageInput.value = "";
-    typeInput.value = "";
-    weightInput.value = "";
-    lengthInput.value = "";
-    breedInput.value = "";
-    colorInput.value = "";
-    vaccinatedInput.checked = false;
-    dewormedInput.checked = false;
-    sterilizedInput.checked = false;
-}
 
-// 7. Xóa một thú cưng
-function deletePet(id) {
-    if (confirm('Are you sure?')) {
-        // tìm index có id muốn xóa.
-        const index = petArr.findIndex(pet => pet.id == id);
-        if (index !== -1) {
-            petArr.splice(index, 1);
-            renderTableData(petArr);
-            saveToStorage("petArr", petArr);
-
-        }
+function showEdit(id) {
+    var container = document.getElementById("container-form");
+    if (container.classList.contains("hide")) {
+        container.classList.remove("hide");
     }
+    let pet = petArr.filter((p)=> p.id == id);
+    pet = pet[0];
+    idInput.value = pet.id;
+    nameInput.value = pet.name;
+    ageInput.value = pet.age;
+    typeInput.value =pet.type;
+    weightInput.value = pet.weight;
+    lengthInput.value = pet.length;
+    breedInput.value = pet.breed;
+    colorInput.value = pet.color;
+    vaccinatedInput.checked = pet.vaccinated ? true: false;
+    dewormedInput.checked = pet.dewormed ? true: false;;
+    sterilizedInput.checked = pet.sterilized ? true: false;;
 }
-
-
-// 8. Hiển thị các thú cưng khỏe mạnh
-function filterHealthyPets() {
-    if (healthyCheck) {
-        renderTableData(petArr);
-        document.getElementById("healthy-btn").textContent = "Show Healthy Pet";
-    } else {
-        healthyPetArr = petArr.filter(pet => pet.vaccinated && pet.dewormed && pet.sterilized);
-        renderTableData(healthyPetArr);
-        document.getElementById("healthy-btn").textContent = "Show All Pet";
-    }
-
-    healthyCheck = !healthyCheck;
-}
-
-document.getElementById("healthy-btn").addEventListener("click", filterHealthyPets);
-
-
-// 9. (Nâng cao) Tính toán chỉ số BMI
-const bmiBtn = document.getElementById("calculate-bmi");
-
-function calculateBMI(weight, length, type) {
-    const multiplier = type === "Dog" ? 703 : 886;
-    const bmi = (weight * multiplier) / (length ** 2);
-    return bmi.toFixed(2);
-}
-
-bmiBtn.addEventListener("click", function () {
-    for (let i = 0; i < petArr.length; i++) {
-        const pet = petArr[i];
-        const bmi = calculateBMI(pet.weight, pet.length, pet.type);
-        pet.bmi = bmi;
-    }
-    renderTableData(petArr);
-    saveToStorage("petArr", petArr);
-});
